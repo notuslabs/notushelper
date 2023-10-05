@@ -33,7 +33,5 @@ RUN npm install --omit=dev
 COPY --from=build-runner /tmp/app/build /app/build
 COPY --from=build-runner /tmp/app/prisma /app/prisma
 
-ENV TZ 'America/Sao_Paulo'
-
 # Start bot
 CMD [ "npm", "run", "start" ]
