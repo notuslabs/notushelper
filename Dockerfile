@@ -37,5 +37,7 @@ COPY --from=build-runner /tmp/app/prisma /app/prisma
 # Generate prisma client
 RUN npx prisma generate
 
+ENV TZ 'America/Sao_Paulo'
+
 # Start bot
 CMD [ "npm", "run", "start" ]
