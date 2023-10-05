@@ -9,7 +9,7 @@
     "build": "tsc",
     "build:changelog": "npx @discordx/changelog --src src",
     "dev": "node --inspect -r ts-node/register ./src/main.ts",
-    "start": "npx prisma migrate deploy && node build/main.js",
+    "start": "sleep 1 && npx prisma migrate deploy && node build/main.js",
     "watch": "nodemon --exec ts-node-esm src/main.ts"
   },
   "dependencies": {
