@@ -29,6 +29,7 @@ COPY --from=build-runner /tmp/app/package.json /app/package.json
 
 # Install dependencies
 RUN npm install --omit=dev
+RUN npx prisma generate
 
 # Move build files
 COPY --from=build-runner /tmp/app/build /app/build
