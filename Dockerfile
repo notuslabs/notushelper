@@ -12,6 +12,7 @@ RUN npm ci
 
 # Move source files
 COPY src ./src
+COPY prisma .
 COPY tsconfig.json   .
 
 # Build project
