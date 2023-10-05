@@ -25,8 +25,8 @@ export class CreateEmployeeUseCase {
 
     if (employeeExists) {
       throw new Exception(
-        "Você já está registrado no sistema.",
-        "user_already_registered"
+        "You have already run this command. Please use the `/setup update` command.",
+        "employee_already_exists"
       );
     }
 

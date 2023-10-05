@@ -23,7 +23,7 @@ export class UpdateEmployeeUseCase {
 
     if (!employeeExists) {
       throw new Exception(
-        "Você não está registrado no sistema. Use o comando `/setup init` para se registrar.",
+        "You're not in the system. Please use the `/setup init` command.",
         "user_not_registered"
       );
     }

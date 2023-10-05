@@ -33,7 +33,7 @@ export class SearchMembersByTeamUseCase {
         const team = teams.find((team) => team.id === teamId);
 
         if (!team) {
-          throw new Exception("Time não encontrado.", "team_not_found");
+          throw new Exception("Team not found", "team_not_found");
         }
 
         return team.members;

@@ -77,7 +77,7 @@ export class SetupCommand {
     });
 
     await interaction.followUp(
-      `Setup realizado com sucesso! Você pode usar o comando \`/workstats\` para ver suas estatísticas de trabalho.`
+      `Setup realizado com sucesso! Você pode usar o comando \`/monthlystats-work\` para ver suas estatísticas de trabalho.`
     );
   }
 

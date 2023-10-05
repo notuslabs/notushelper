@@ -1,10 +1,8 @@
-import prettyMilliseconds from "pretty-ms";
 import { client } from "../clients/clickup.js";
 import { Exception } from "../helpers/Exception.js";
 import { prisma } from "../main.js";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
-
 dayjs.extend(utc);
 
 export type GetWorkStatsUseCaseInput = {
@@ -12,7 +10,7 @@ export type GetWorkStatsUseCaseInput = {
   month: number | undefined;
 };
 
-export class GetWorkStatsUseCase {
+export class GetMonthlyStatsUseCase {
   async execute({
     discordUserId,
     month = dayjs().month(),
@@ -23,8 +21,8 @@ export class GetWorkStatsUseCase {
 
     if (!employee) {
       throw new Exception(
-        "Você não está registrado no sistema. Use o comando `/setup init` para se registrar.",
-        "user_not_registered"
+        "You're not in the system. Please use the `/setup init` command.",
+        "employee_not_found"
       );
     }
 
@@ -50,19 +48,21 @@ export class GetWorkStatsUseCase {
         : null,
     ]);
 
-    const timeWorkedInMS = timeTrackingEntries.reduce(
+    const { duration: timeWorkedInMS } = timeTrackingEntries.reduce(
       (pTime, cTime) => ({
         duration: Number(pTime.duration) + Number(cTime.duration),
       }),
       { duration: Math.abs(Number(currentTimeTracking?.duration ?? 0)) }
     );
 
-    const timeWorkedInHours = timeWorkedInMS.duration / 3.6e6;
+    const timeWorkedInHours = timeWorkedInMS / 3.6e6;
 
-    const humanReadableTimeWorked = prettyMilliseconds(timeWorkedInMS.duration);
+    const hours = Math.floor(timeWorkedInMS / 3.6e6);
+    const minutes = Math.floor((timeWorkedInMS % 3.6e6) / 6e4);
+    const seconds = Math.floor((timeWorkedInMS % 6e4) / 1e3);
 
     return {
-      humanReadableTimeWorked,
+      timeWorked: `${hours}:${minutes}:${seconds}`,
       salary: (employee.salaryPerHour * timeWorkedInHours).toFixed(2),
     };
   }

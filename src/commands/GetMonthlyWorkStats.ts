@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { GetWorkStatsUseCase } from "../useCases/GetWorkStatsUseCase.js";
+import { GetMonthlyStatsUseCase } from "../useCases/GetMonthlyStatsUseCase.js";
 import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
 import dayjs from "dayjs";
 
@@ -13,11 +13,11 @@ import dayjs from "dayjs";
 @Guard(InteractionExceptionHandler(true))
 @injectable()
 export class GetWorkStatsCommand {
-  constructor(private getWorkStatsUseCase: GetWorkStatsUseCase) {}
+  constructor(private getWorkStatsUseCase: GetMonthlyStatsUseCase) {}
 
   @Slash({
-    name: "workstats",
-    description: "get your work stats",
+    name: "monthlystats-work",
+    description: "Get your monthly work statistics",
   })
   async handle(
     @SlashChoice(
@@ -44,19 +44,18 @@ export class GetWorkStatsCommand {
 
     interaction: CommandInteraction
   ) {
-    const { humanReadableTimeWorked, salary } =
-      await this.getWorkStatsUseCase.execute({
-        discordUserId: interaction.user.id,
-        month,
-      });
+    const { timeWorked, salary } = await this.getWorkStatsUseCase.execute({
+      discordUserId: interaction.user.id,
+      month,
+    });
 
     const hoursWorkedEmbed = new EmbedBuilder()
       .setTitle(`Work statistics - ${dayjs().month(month).format("MMMM")}`)
-      .setDescription(`Hey! Looking for some work statistics?`)
+      .setDescription(`Hey! Looking for some monthly work statistics?`)
       .setColor("#0070F0")
       .addFields({
-        name: "Time that you've worked:",
-        value: humanReadableTimeWorked,
+        name: "Hours worked:",
+        value: timeWorked,
         inline: true,
       })
       .addFields({
