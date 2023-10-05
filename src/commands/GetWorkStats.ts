@@ -1,0 +1,72 @@
+import {
+  ApplicationCommandOptionType,
+  CommandInteraction,
+  EmbedBuilder,
+} from "discord.js";
+import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
+import { injectable } from "tsyringe";
+import { GetWorkStatsUseCase } from "../useCases/GetWorkStatsUseCase.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import dayjs from "dayjs";
+
+@Discord()
+@Guard(InteractionExceptionHandler(true))
+@injectable()
+export class GetWorkStatsCommand {
+  constructor(private getWorkStatsUseCase: GetWorkStatsUseCase) {}
+
+  @Slash({
+    name: "workstats",
+    description: "get your work stats",
+  })
+  async handle(
+    @SlashChoice(
+      { name: "January", value: 0 },
+      { name: "February", value: 1 },
+      { name: "March", value: 2 },
+      { name: "April", value: 3 },
+      { name: "May", value: 4 },
+      { name: "June", value: 5 },
+      { name: "July", value: 6 },
+      { name: "August", value: 7 },
+      { name: "September", value: 8 },
+      { name: "October", value: 9 },
+      { name: "November", value: 10 },
+      { name: "December", value: 11 }
+    )
+    @SlashOption({
+      name: "month",
+      description: "month to get the stats from",
+      required: false,
+      type: ApplicationCommandOptionType.Integer,
+    })
+    month: number = dayjs().month(),
+
+    interaction: CommandInteraction
+  ) {
+    const { humanReadableTimeWorked, salary } =
+      await this.getWorkStatsUseCase.execute({
+        discordUserId: interaction.user.id,
+        month,
+      });
+
+    const hoursWorkedEmbed = new EmbedBuilder()
+      .setTitle(`Work statistics - ${dayjs().month(month).format("MMMM")}`)
+      .setDescription(`Hey! Looking for some work statistics?`)
+      .setColor("#0070F0")
+      .addFields({
+        name: "Time that you've worked:",
+        value: humanReadableTimeWorked,
+        inline: true,
+      })
+      .addFields({
+        name: "Your salary:",
+        value: `R$ ${salary}`,
+        inline: true,
+      });
+
+    await interaction.followUp({
+      embeds: [hoursWorkedEmbed],
+    });
+  }
+}

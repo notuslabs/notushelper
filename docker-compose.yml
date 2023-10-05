@@ -1,0 +1,14 @@
+version: "3"
+services:
+  clickUpPostgres:
+    image: postgres
+    container_name: clickuppostgres
+    environment:
+      - POSTGRES_PASSWORD=clickup
+      - POSTGRES_DATABASE=clickup
+    ports:
+      - 5432:5432
+    volumes:
+      - clickUpPostgresData:/data/postgres
+volumes:
+  clickUpPostgresData:
