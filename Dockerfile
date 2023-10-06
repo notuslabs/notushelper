@@ -16,6 +16,7 @@ COPY prisma ./prisma
 COPY tsconfig.json   .
 
 # Build project
+RUN npx prisma generate
 RUN npm run build
 
 ## production runner
