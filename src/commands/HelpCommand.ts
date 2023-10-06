@@ -27,6 +27,8 @@ export class HelpCommand {
     helpEmbed.setDescription(allCommands);
 
     await interaction.followUp({
+      content:
+        "My code is available at <https://github.com/notuslabs/notushelper>",
       embeds: [helpEmbed],
     });
   }
