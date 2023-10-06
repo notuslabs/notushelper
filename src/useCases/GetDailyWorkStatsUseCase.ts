@@ -60,9 +60,7 @@ export class GetDailyWorkStatsUseCase {
     } else {
       finishWorkAt = `${dayjs()
         .add(workloadInMS - timeWorkedInMS, "ms")
-        .format("HH:mm")} (${prettyMilliseconds(
-        workloadInMS - timeWorkedInMS
-      )})`;
+        .format("HH:mm")}`;
     }
 
     return {
