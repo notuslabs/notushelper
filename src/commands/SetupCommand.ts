@@ -7,7 +7,7 @@ import { UpdateEmployeeUseCase } from "../useCases/UpdateEmployeeUseCase.js";
 import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
 
 @Discord()
-@SlashGroup({ name: "setup", description: "Configurações do bot" })
+@SlashGroup({ name: "setup", description: "Setup employee" })
 @Guard(InteractionExceptionHandler(true))
 @injectable()
 export class SetupCommand {
@@ -18,7 +18,7 @@ export class SetupCommand {
 
   @Slash({
     name: "init",
-    description: "Faz o setup inicial do bot",
+    description: "Setup your configuration",
   })
   @SlashGroup("setup")
   async handle(

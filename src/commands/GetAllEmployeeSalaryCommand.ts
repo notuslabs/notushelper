@@ -19,7 +19,11 @@ export class GetAllEmployeeSalaryCommand {
 
   @Slash({
     name: "allsalaries",
-    description: "Get all employees salaries",
+    description: `Get all employees salaries (only ${process.env.ALLOWED_SALARY_REQUESTERS_IDS?.split(
+      ","
+    )
+      ?.map((id) => `<@${id}>`)
+      .join(", ")} can see this)`,
   })
   async execute(
     @SlashChoice(
