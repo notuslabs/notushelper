@@ -52,7 +52,7 @@ export class GetWorkStatsCommand {
     const hoursWorkedEmbed = new EmbedBuilder()
       .setTitle(`Work statistics - ${dayjs().month(month).format("MMMM")}`)
       .setDescription(`Hey! Looking for some monthly work statistics?`)
-      .setColor("#0070F0")
+      .setColor("#fe9b69")
       .addFields({
         name: "Hours worked:",
         value: timeWorked,

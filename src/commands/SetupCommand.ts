@@ -26,7 +26,8 @@ export class SetupCommand {
       name: "salario_hora",
       required: true,
       type: ApplicationCommandOptionType.Number,
-      description: "Quanto você ganha por hora? E.g. 14,5",
+      description:
+        "Quanto você ganha por hora? E.g. 14,5 (Apenas pessoas que já sabem seu salário podem ver)",
     })
     salaryPerHour: number,
 
@@ -92,7 +93,7 @@ export class SetupCommand {
       required: true,
       type: ApplicationCommandOptionType.Number,
       description:
-        "Quanto você ganha por hora? E.g. 14,5 (Ninguém além de você terá acesso a essa informação)",
+        "Quanto você ganha por hora? E.g. 14,5 (Apenas pessoas que já sabem seu salário podem ver)",
     })
     salaryPerHour: number,
 

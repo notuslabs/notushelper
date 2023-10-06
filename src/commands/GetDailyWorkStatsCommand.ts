@@ -23,7 +23,7 @@ export class GetDailyWorkStatsCommand {
     const statsWorkEmbed = new EmbedBuilder()
       .setTitle(`Work statistics`)
       .setDescription(`Hey! Looking for some daily work statistics?`)
-      .setColor("#0070F0")
+      .setColor("#fe9b69")
       .addFields({
         name: "Hours worked:",
         value: timeWorkedHumanReadable,

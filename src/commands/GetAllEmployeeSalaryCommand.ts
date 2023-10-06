@@ -62,7 +62,7 @@ export class GetAllEmployeeSalaryCommand {
       `All salaries - ${dayjs().month(month).format("MMMM")}`
     );
     salariesEmbed.setDescription(`Hey! Here are all the salaries`);
-    salariesEmbed.setColor("#0070F0");
+    salariesEmbed.setColor("#fe9b69");
     salariesEmbed.addFields({
       name: "Salaries:",
       value: salaries,
