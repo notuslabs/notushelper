@@ -56,8 +56,8 @@ export class GetAllEmployeeSalaryCommand {
     });
 
     const salaries = allsalaries
-      .map(({ discordUserId, salary, timeWorked }) => {
-        return `<@${discordUserId}> - ${salary} - ${timeWorked}`;
+      .map(({ discordUserId, salary, timeWorked, salaryPerHour }) => {
+        return `<@${discordUserId}> - ${salary} (R$${salaryPerHour}/h) - ${timeWorked}`;
       })
       .join("\n");
 

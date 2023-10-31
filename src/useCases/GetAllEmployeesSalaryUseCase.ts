@@ -37,10 +37,12 @@ export class GetAllEmployeesSalaryUseCase {
         month,
       });
 
+      
       stats.push({
         name: employee.name,
         discordUserId: employee.discordUserId,
         salary,
+        salaryPerHour: employee.salaryPerHour,
         timeWorked,
       });
     }
