@@ -2,8 +2,6 @@ import { client } from "../clients/clickup.js";
 import { Exception } from "../helpers/Exception.js";
 import { prisma } from "../main.js";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
-dayjs.extend(utc);
 
 export type GetWorkStatsUseCaseInput = {
   discordUserId: string;
@@ -26,12 +24,8 @@ export class GetMonthlyStatsUseCase {
       );
     }
 
-    const firstDayOfTheMonth = dayjs
-      .utc()
-      .month(month)
-      .startOf("month")
-      .toDate();
-    const lastDayOfTheMonth = dayjs.utc().month(month).endOf("month").toDate();
+    const firstDayOfTheMonth = dayjs().month(month).startOf("month").toDate();
+    const lastDayOfTheMonth = dayjs().month(month).endOf("month").toDate();
 
     const [timeTrackingEntries, currentTimeTracking] = await Promise.all([
       await client.timeTracking.getTimeTrackingEntries({

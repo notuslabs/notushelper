@@ -2,11 +2,9 @@ import { Discord } from "discordx";
 import { injectable } from "tsyringe";
 import { client } from "../clients/clickup.js";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc.js";
 import { prisma } from "../main.js";
 import { Exception } from "../helpers/Exception.js";
 import prettyMilliseconds from "pretty-ms";
-dayjs.extend(utc);
 
 export type GetDailyWorkStatsUseCaseInput = {
   discordUserId: string;
@@ -27,8 +25,8 @@ export class GetDailyWorkStatsUseCase {
       );
     }
 
-    const startOfTheDay = dayjs.utc().startOf("day").toDate();
-    const endOfTheDay = dayjs.utc().endOf("day").toDate();
+    const startOfTheDay = dayjs().startOf("day").toDate();
+    const endOfTheDay = dayjs().endOf("day").toDate();
 
     const [timeTrackingEntries, currentTimeTracking] = await Promise.all([
       await client.timeTracking.getTimeTrackingEntries({
