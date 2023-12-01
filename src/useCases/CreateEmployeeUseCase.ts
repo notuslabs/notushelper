@@ -30,6 +30,17 @@ export class CreateEmployeeUseCase {
       );
     }
 
+    const employeeWithSameClickUpId = await prisma.employee.findUnique({
+      where: { clickUpUserId },
+    });
+
+    if (employeeWithSameClickUpId) {
+      throw new Exception(
+        `The employee <@${employeeWithSameClickUpId.discordUserId}> is already using the ClickUp user you provided.`,
+        "clickup_id_already_exists"
+      );
+    }
+
     const employee = await prisma.employee.create({
       data: {
         discordUserId,
