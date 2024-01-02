@@ -36,17 +36,26 @@ export class GetWorkStatsCommand {
     )
     @SlashOption({
       name: "month",
-      description: "month to get the stats from",
+      description: "month to get the stats from (optional)",
       required: false,
       type: ApplicationCommandOptionType.Integer,
     })
     month: number = dayjs().month(),
+
+    @SlashOption({
+      name: "year",
+      description: "year to get the stats from (optional)",
+      required: false,
+      type: ApplicationCommandOptionType.Integer,
+    })
+    year: number = dayjs().year(),
 
     interaction: CommandInteraction
   ) {
     const { timeWorked, salary } = await this.getWorkStatsUseCase.execute({
       discordUserId: interaction.user.id,
       month,
+      year,
     });
 
     const hoursWorkedEmbed = new EmbedBuilder()

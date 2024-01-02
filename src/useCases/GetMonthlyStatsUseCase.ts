@@ -5,12 +5,14 @@ import dayjs from "dayjs";
 
 export type GetWorkStatsUseCaseInput = {
   discordUserId: string;
-  month: number | undefined;
+  year?: number | undefined;
+  month?: number | undefined;
 };
 
 export class GetMonthlyStatsUseCase {
   async execute({
     discordUserId,
+    year = dayjs().year(),
     month = dayjs().month(),
   }: GetWorkStatsUseCaseInput) {
     const employee = await prisma.employee.findUnique({
@@ -24,8 +26,8 @@ export class GetMonthlyStatsUseCase {
       );
     }
 
-    const firstDayOfTheMonth = dayjs().month(month).startOf("month").toDate();
-    const lastDayOfTheMonth = dayjs().month(month).endOf("month").toDate();
+    const firstDayOfTheMonth = dayjs().year(year).month(month).startOf("month").toDate();
+    const lastDayOfTheMonth = dayjs().year(year).month(month).endOf("month").toDate();
 
     const [timeTrackingEntries, currentTimeTracking] = await Promise.all([
       await client.timeTracking.getTimeTrackingEntries({
