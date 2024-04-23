@@ -27,6 +27,9 @@ export class CreateCodeReviewThreadUseCase {
 			content: `Eu escolho vocês! ${currentReviwers
 				.map((id) => `<@${id}>`)
 				.join(", ")}!`,
+			allowedMentions: {
+				parse: [],
+			},
 		});
 
 		await threadMessage.react("1232346477519437992"); // pokeball
