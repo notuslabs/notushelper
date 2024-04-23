@@ -18,10 +18,18 @@ export class CreateCodeReviewThreadUseCase {
 		});
 
 		const mentionedReviewers = Array.from(message.mentions.users.keys());
-		const currentReviwers =
-			mentionedReviewers.length === 1
-				? [mentionedReviewers[0], reviewers.next(mentionedReviewers[0])]
-				: mentionedReviewers;
+		const currentReviwers: string[] = [];
+
+		if (mentionedReviewers.length === 0) {
+			currentReviwers.push(reviewers.next(), reviewers.next());
+		} else if (mentionedReviewers.length === 1) {
+			currentReviwers.push(
+				reviewers.next(mentionedReviewers[0]),
+				mentionedReviewers[0],
+			);
+		} else if (mentionedReviewers.length >= 2) {
+			currentReviwers.push(...mentionedReviewers);
+		}
 
 		const threadMessage = await thread.send({
 			content: `Eu escolho vocês! ${currentReviwers
