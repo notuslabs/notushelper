@@ -8,34 +8,34 @@ import { CommandInteraction, EmbedBuilder } from "discord.js";
 @Guard(InteractionExceptionHandler(true))
 @injectable()
 export class GetDailyWorkStatsCommand {
-  constructor(private getDailyWorkStatsUseCase: GetDailyWorkStatsUseCase) {}
+	constructor(private getDailyWorkStatsUseCase: GetDailyWorkStatsUseCase) {}
 
-  @Slash({
-    name: "dailystats-work",
-    description: "Get your daily work statistics",
-  })
-  async execute(interaction: CommandInteraction) {
-    const { timeWorkedHumanReadable, finishWorkAt } =
-      await this.getDailyWorkStatsUseCase.execute({
-        discordUserId: interaction.user.id,
-      });
+	@Slash({
+		name: "dailystats-work",
+		description: "Get your daily work statistics",
+	})
+	async execute(interaction: CommandInteraction) {
+		const { timeWorkedHumanReadable, finishWorkAt } =
+			await this.getDailyWorkStatsUseCase.execute({
+				discordUserId: interaction.user.id,
+			});
 
-    const statsWorkEmbed = new EmbedBuilder()
-      .setTitle(`Work statistics`)
-      .setDescription(`Hey! Looking for some daily work statistics?`)
-      .setColor("#fe9b69")
-      .addFields({
-        name: "Hours worked:",
-        value: timeWorkedHumanReadable,
-        inline: true,
-      })
-      .addFields({
-        name: "You'll finish your work at:",
-        value: finishWorkAt,
-      });
+		const statsWorkEmbed = new EmbedBuilder()
+			.setTitle(`Work statistics`)
+			.setDescription(`Hey! Looking for some daily work statistics?`)
+			.setColor("#fe9b69")
+			.addFields({
+				name: "Hours worked:",
+				value: timeWorkedHumanReadable,
+				inline: true,
+			})
+			.addFields({
+				name: "You'll finish your work at:",
+				value: finishWorkAt,
+			});
 
-    await interaction.followUp({
-      embeds: [statsWorkEmbed],
-    });
-  }
+		await interaction.followUp({
+			embeds: [statsWorkEmbed],
+		});
+	}
 }

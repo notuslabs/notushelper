@@ -6,47 +6,46 @@ import dayjs from "dayjs";
 import { Exception } from "../helpers/Exception.js";
 
 export type GetAllEmployeesSalaryUseCaseInput = {
-  month?: number;
-  requestBy: string;
+	month?: number;
+	requestBy: string;
 };
 
 @Discord()
 @injectable()
 export class GetAllEmployeesSalaryUseCase {
-  constructor(private getMonthlyStatsUseCase: GetMonthlyStatsUseCase) {}
+	constructor(private getMonthlyStatsUseCase: GetMonthlyStatsUseCase) {}
 
-  async execute({
-    month = dayjs().subtract(1, "month").month(),
-    requestBy,
-  }: GetAllEmployeesSalaryUseCaseInput) {
-    if (
-      !process.env.ALLOWED_SALARY_REQUESTERS_IDS?.split(",").includes(requestBy)
-    )
-      throw new Exception(
-        "You're not allowed to request this information",
-        "not_allowed"
-      );
+	async execute({
+		month = dayjs().subtract(1, "month").month(),
+		requestBy,
+	}: GetAllEmployeesSalaryUseCaseInput) {
+		if (
+			!process.env.ALLOWED_SALARY_REQUESTERS_IDS?.split(",").includes(requestBy)
+		)
+			throw new Exception(
+				"You're not allowed to request this information",
+				"not_allowed",
+			);
 
-    const employees = await prisma.employee.findMany();
+		const employees = await prisma.employee.findMany();
 
-    const stats = [];
+		const stats = [];
 
-    for (const employee of employees) {
-      const { salary, timeWorked } = await this.getMonthlyStatsUseCase.execute({
-        discordUserId: employee.discordUserId,
-        month,
-      });
+		for (const employee of employees) {
+			const { salary, timeWorked } = await this.getMonthlyStatsUseCase.execute({
+				discordUserId: employee.discordUserId,
+				month,
+			});
 
-      
-      stats.push({
-        name: employee.name,
-        discordUserId: employee.discordUserId,
-        salary,
-        salaryPerHour: employee.salaryPerHour,
-        timeWorked,
-      });
-    }
+			stats.push({
+				name: employee.name,
+				discordUserId: employee.discordUserId,
+				salary,
+				salaryPerHour: employee.salaryPerHour,
+				timeWorked,
+			});
+		}
 
-    return stats;
-  }
+		return stats;
+	}
 }

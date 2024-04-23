@@ -8,28 +8,28 @@ import { CommandInteraction, EmbedBuilder } from "discord.js";
 @Guard(InteractionExceptionHandler(false))
 @injectable()
 export class GetAllEmployeesCommand {
-  constructor(private getAllEmployeesUseCase: GetAllEmployeesUseCase) {}
+	constructor(private getAllEmployeesUseCase: GetAllEmployeesUseCase) {}
 
-  @Slash({
-    name: "get-all-employees",
-    description: "Get all employees",
-  })
-  async execute(interaction: CommandInteraction) {
-    const employees = await this.getAllEmployeesUseCase.execute();
+	@Slash({
+		name: "get-all-employees",
+		description: "Get all employees",
+	})
+	async execute(interaction: CommandInteraction) {
+		const employees = await this.getAllEmployeesUseCase.execute();
 
-    const employeesList = employees
-      .map((employee) => {
-        return `<@${employee.discordUserId}>`;
-      })
-      .join("\n");
+		const employeesList = employees
+			.map((employee) => {
+				return `<@${employee.discordUserId}>`;
+			})
+			.join("\n");
 
-    const employeesEmbed = new EmbedBuilder();
-    employeesEmbed.setTitle("All Employees");
-    employeesEmbed.setDescription(employeesList);
-    employeesEmbed.setColor("#fe9b69");
+		const employeesEmbed = new EmbedBuilder();
+		employeesEmbed.setTitle("All Employees");
+		employeesEmbed.setDescription(employeesList);
+		employeesEmbed.setColor("#fe9b69");
 
-    await interaction.followUp({
-      embeds: [employeesEmbed],
-    });
-  }
+		await interaction.followUp({
+			embeds: [employeesEmbed],
+		});
+	}
 }

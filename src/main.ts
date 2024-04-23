@@ -14,40 +14,40 @@ DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 export const prisma = new PrismaClient();
 
 export const bot = new Client({
-  intents: [
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMembers,
-    IntentsBitField.Flags.GuildMessages,
-    IntentsBitField.Flags.GuildMessageReactions,
-    IntentsBitField.Flags.GuildVoiceStates,
-    IntentsBitField.Flags.MessageContent,
-  ],
+	intents: [
+		IntentsBitField.Flags.Guilds,
+		IntentsBitField.Flags.GuildMembers,
+		IntentsBitField.Flags.GuildMessages,
+		IntentsBitField.Flags.GuildMessageReactions,
+		IntentsBitField.Flags.GuildVoiceStates,
+		IntentsBitField.Flags.MessageContent,
+	],
 
-  silent: false,
+	silent: false,
 });
 
 bot.once("ready", async () => {
-  await bot.initApplicationCommands();
+	await bot.initApplicationCommands();
 
-  console.log("Bot started");
+	console.log("Bot started");
 });
 
 bot.on("interactionCreate", (interaction: Interaction) => {
-  bot.executeInteraction(interaction);
+	bot.executeInteraction(interaction);
 });
 
 bot.on("messageCreate", (message: Message) => {
-  bot.executeCommand(message);
+	bot.executeCommand(message);
 });
 
 async function run() {
-  await importx(`${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`);
+	await importx(`${dirname(import.meta.url)}/{events,commands}/**/*.{ts,js}`);
 
-  if (!process.env.BOT_TOKEN) {
-    throw Error("Could not find BOT_TOKEN in your environment");
-  }
+	if (!process.env.BOT_TOKEN) {
+		throw Error("Could not find BOT_TOKEN in your environment");
+	}
 
-  await bot.login(process.env.BOT_TOKEN);
+	await bot.login(process.env.BOT_TOKEN);
 }
 
 run();

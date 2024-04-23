@@ -10,6 +10,7 @@
     "build:changelog": "npx @discordx/changelog --src src",
     "dev": "node --inspect -r ts-node/register ./src/main.ts",
     "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
+    "format": "biome format src/ --write",
     "watch": "nodemon --exec ts-node-esm src/main.ts"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.7.1",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.0",
     "nodemon": "^2.0.20",
