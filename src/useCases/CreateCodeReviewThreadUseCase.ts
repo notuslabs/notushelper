@@ -36,7 +36,7 @@ export class CreateCodeReviewThreadUseCase {
 				.map((id) => `<@${id}>`)
 				.join(", ")}!`,
 			allowedMentions: {
-				parse: [],
+				parse: ["users"],
 			},
 		});
 
