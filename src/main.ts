@@ -12,6 +12,28 @@ import { PrismaClient } from "@prisma/client";
 DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
 export const prisma = new PrismaClient();
+export const reviewers = {
+	reviewers: [
+		"692404092756164668",
+		"818959779326197841",
+		"195746220902187008",
+		"522095646061363212",
+		"378956057180897292",
+		"321177932959711232",
+	],
+	currentViewer: 0,
+	next(userId?: string): string {
+		if (this.currentViewer >= this.reviewers.length) {
+			this.currentViewer = 0;
+		}
+
+		const nextReviewer = this.reviewers[this.currentViewer++];
+
+		if (userId && userId === nextReviewer) return this.next(userId);
+
+		return nextReviewer;
+	},
+};
 
 export const bot = new Client({
 	intents: [

@@ -78,7 +78,7 @@ export class SetupCommand {
 		});
 
 		await interaction.followUp(
-			`Setup realizado com sucesso! Você pode usar o comando \`/monthlystats-work\` para ver suas estatísticas de trabalho.`,
+			"Setup realizado com sucesso! Você pode usar o comando `/monthlystats-work` para ver suas estatísticas de trabalho.",
 		);
 	}
 
@@ -143,6 +143,6 @@ export class SetupCommand {
 			workloadPerDay,
 		});
 
-		await interaction.followUp(`Setup atualizado com sucesso!`);
+		await interaction.followUp("Setup atualizado com sucesso!");
 	}
 }
