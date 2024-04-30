@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.5 as prod-runner
+FROM oven/bun:1.1.6 as prod-runner
 
 # Set work directory
 WORKDIR /app
@@ -11,6 +11,8 @@ RUN bun install --production
 
 # Copy source code
 COPY . .
+# Prisma crashes if node is not installed (https://github.com/oven-sh/bun/issues/5320)
+COPY --from=node:18 /usr/local/bin/node /usr/local/bin/node 
 
 # Generate prisma client and build
 RUN bunx prisma generate

@@ -8,9 +8,6 @@
   "ts-node": {
     "esm": true
   },
-  "prisma": {
-    "seed": "bun run prisma/seed.ts"
-  },
   "scripts": {
     "build": "bun build src/main.ts --target bun --outdir build --preload reflect-metadata",
     "build:changelog": "npx @discordx/changelog --src src",
@@ -21,7 +18,7 @@
   "dependencies": {
     "@discordx/importer": "^1.1.10",
     "@discordx/pagination": "^3.4.0",
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "5.13.0",
     "@t3-oss/env-core": "^0.10.1",
     "cache-manager": "^5.2.3",
     "clickup.ts": "^1.0.6",
