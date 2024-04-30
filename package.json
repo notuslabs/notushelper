@@ -12,7 +12,7 @@
     "seed": "bun run prisma/seed.ts"
   },
   "scripts": {
-    "build": "bun build src/main.ts --target node --outdir build --preload reflect-metadata",
+    "build": "bun build src/main.ts --target bun --outdir build --preload reflect-metadata",
     "build:changelog": "npx @discordx/changelog --src src",
     "dev": "bun run --watch ./src/main.ts --preload reflect-metadata",
     "start": "sleep 5 && bunx prisma migrate deploy && node build/src/main.js",
