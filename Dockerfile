@@ -14,7 +14,7 @@ WORKDIR /app
 COPY . .
 
 # Generate prisma client
-RUN bun run prisma generate
+RUN bun prisma generate 
 
 ENV TZ 'America/Sao_Paulo'
 
