@@ -11,7 +11,7 @@ RUN bun i --production
 WORKDIR /app
 
 # Generate prisma client
-RUN npx prisma generate
+RUN bun prisma generate
 
 ENV TZ 'America/Sao_Paulo'
 
