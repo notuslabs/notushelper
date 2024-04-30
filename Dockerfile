@@ -1,5 +1,5 @@
 ## production runner
-FROM node:18.16.0 as prod-runner
+FROM oven/bun:1.1.5 as prod-runner
 
 # Move package.json
 COPY package*.json .
