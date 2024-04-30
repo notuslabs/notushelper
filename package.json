@@ -12,10 +12,10 @@
     "seed": "bun run prisma/seed.ts"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "bun build",
     "build:changelog": "npx @discordx/changelog --src src",
     "dev": "bun run --inspect --watch ./src/main.ts",
-    "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
+    "start": "sleep 5 && npx prisma migrate deploy && bun run src/main.ts",
     "format": "biome format src/ --write"
   },
   "dependencies": {
