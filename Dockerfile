@@ -13,7 +13,6 @@ RUN bun install --production
 COPY . .
 
 # Generate prisma client and build
-RUN bun run build
 RUN bunx prisma generate
 
 ENV TZ 'America/Sao_Paulo'

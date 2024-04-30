@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import "dotenv/config";
 import { dirname, importx } from "@discordx/importer";
 import type { Interaction, Message } from "discord.js";
