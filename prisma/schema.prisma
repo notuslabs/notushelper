@@ -21,3 +21,32 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum Role {
+  BACKEND
+  FRONTEND
+}
+
+model Maintainer {
+  id            String @id @default(uuid())
+  name          String
+  discordUserId String @unique
+  reviewCount   Int    @default(0)
+  role          Role[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("maintainers")
+}
+
+model Project {
+  id        String @id @default(uuid())
+  name      String @unique
+  roleFocus Role
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projects")
+}

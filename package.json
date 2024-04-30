@@ -5,19 +5,24 @@
   "license": "MIT",
   "type": "module",
   "main": "build/main.js",
+  "ts-node": {
+    "esm": true
+  },
+  "prisma": {
+    "seed": "bun run prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
     "build:changelog": "npx @discordx/changelog --src src",
-    "dev": "node --inspect -r ts-node/register ./src/main.ts",
+    "dev": "bun run --inspect --watch ./src/main.ts",
     "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
-    "format": "biome format src/ --write",
-    "watch": "nodemon --exec ts-node-esm src/main.ts"
+    "format": "biome format src/ --write"
   },
   "dependencies": {
     "@discordx/importer": "^1.1.10",
     "@discordx/pagination": "^3.4.0",
     "@prisma/client": "^4.16.1",
-    "@types/node-schedule": "^2.1.0",
+    "@t3-oss/env-core": "^0.10.1",
     "cache-manager": "^5.2.3",
     "clickup.ts": "^1.0.6",
     "dayjs": "^1.11.10",
@@ -30,21 +35,17 @@
     "reflect-metadata": "^0.1.13",
     "stale-while-revalidate-cache": "^3.2.1",
     "tsyringe": "^4.7.0",
-    "uuid": "^9.0.0"
+    "zod": "^3.23.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.1",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.0",
-    "nodemon": "^2.0.20",
-    "prettier": "^2.8.4",
     "prisma": "^4.16.1",
-    "ts-node": "^10.9.1",
-    "tsx": "^4.7.2",
-    "typescript": "4.9.5"
+    "typescript": "^5.4.5"
   },
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
+    "node": "18.16.0",
+    "npm": "9.5.1"
   }
 }
