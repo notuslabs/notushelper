@@ -6,11 +6,12 @@
   "type": "module",
   "main": "build/main.js",
   "scripts": {
-    "build": "bun build src/main.ts --target bun --outdir build --preload reflect-metadata",
+    "build": "tsc",
     "build:changelog": "npx @discordx/changelog --src src",
-    "dev": "bun run --watch ./src/main.ts --preload reflect-metadata",
-    "start": "sleep 5 && bun run prisma/seed.ts && bunx prisma migrate deploy && bun run src/main.ts --preload reflect-metadata",
-    "format": "biome format src/ --write"
+    "dev": "node --inspect -r ts-node/register ./src/main.ts",
+    "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
+    "format": "biome format src/ --write",
+    "watch": "nodemon --exec ts-node-esm src/main.ts"
   },
   "dependencies": {
     "@discordx/importer": "^1.1.10",
@@ -35,7 +36,9 @@
     "@biomejs/biome": "^1.7.1",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.0",
+    "nodemon": "^3.1.0",
     "prisma": "^5.13.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "engines": {
