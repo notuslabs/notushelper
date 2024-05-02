@@ -5,13 +5,15 @@
   "license": "MIT",
   "type": "module",
   "main": "build/main.js",
+  "prisma": {
+    "seed": "ts-node-esm src/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
     "build:changelog": "npx @discordx/changelog --src src",
-    "dev": "node --inspect -r ts-node/register ./src/main.ts",
+    "dev": "nodemon --exec ts-node-esm src/main.ts",
     "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
-    "format": "biome format src/ --write",
-    "watch": "nodemon --exec ts-node-esm src/main.ts"
+    "format": "biome format src/ --write"
   },
   "dependencies": {
     "@discordx/importer": "^1.1.10",
