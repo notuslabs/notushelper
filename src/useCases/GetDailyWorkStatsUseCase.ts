@@ -1,6 +1,5 @@
 import { Discord } from "discordx";
 import { injectable } from "tsyringe";
-import { client } from "../clients/clickup.js";
 import dayjs from "dayjs";
 import { prisma } from "../main.js";
 import { Exception } from "../helpers/Exception.js";
@@ -28,24 +27,21 @@ export class GetDailyWorkStatsUseCase {
 		const startOfTheDay = dayjs().startOf("day").toDate();
 		const endOfTheDay = dayjs().endOf("day").toDate();
 
-		const [timeTrackingEntries, currentTimeTracking] = await Promise.all([
-			await client.timeTracking.getTimeTrackingEntries({
-				teamId: process.env.CLICKUP_TEAM_ID || "",
-				startDate: startOfTheDay.getTime(),
-				endDate: endOfTheDay.getTime(),
-				assignee: employee.clickUpUserId.toString(),
-			}),
-			await client.timeTracking.getTimeTrackingRunning({
-				teamId: process.env.CLICKUP_TEAM_ID || "",
-				assignee: employee.clickUpUserId.toString(),
-			}),
-		]);
+		const timeTrackingEntries = await prisma.timeEntry.findMany({
+			where: {
+				employeeId: employee.id,
+				createdAt: {
+					gte: startOfTheDay,
+					lt: endOfTheDay,
+				},
+			},
+		});
 
 		const { duration: timeWorkedInMS } = timeTrackingEntries.reduce(
 			(pTime, cTime) => ({
-				duration: Number(pTime.duration) + Number(cTime.duration),
+				duration: Number(pTime.duration) + Number(cTime.durationInMS),
 			}),
-			{ duration: Math.abs(Number(currentTimeTracking?.duration ?? 0)) },
+			{ duration: 0 },
 		);
 
 		const workloadInMS = employee.workloadPerDay * 60 * 60 * 1000;

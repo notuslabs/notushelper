@@ -18,8 +18,9 @@ model Employee {
   clickUpUserId  Int    @unique
   workloadPerDay Int    @default(8)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  TimeEntry TimeEntry[]
 }
 
 enum Role {
@@ -49,4 +50,17 @@ model Project {
   updatedAt DateTime @updatedAt
 
   @@map("projects")
+}
+
+model TimeEntry {
+  id         String    @id @default(uuid())
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  employeeId String
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("time_entries")
 }

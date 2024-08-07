@@ -21,8 +21,8 @@ export class GetDailyWorkStatsCommand {
 			});
 
 		const statsWorkEmbed = new EmbedBuilder()
-			.setTitle(`Work statistics`)
-			.setDescription(`Hey! Looking for some daily work statistics?`)
+			.setTitle("Work statistics")
+			.setDescription("Hey! Looking for some daily work statistics?")
 			.setColor("#fe9b69")
 			.addFields({
 				name: "Hours worked:",
