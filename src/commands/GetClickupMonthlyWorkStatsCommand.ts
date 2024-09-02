@@ -101,7 +101,7 @@ export class GetClickupMonthlyWorkStatsCommand {
 		if (salary) {
 			hoursWorkedEmbed.addFields({
 				name: "Salary:",
-				value: salary,
+				value: `R$${salary}`,
 				inline: true,
 			});
 		}
