@@ -81,6 +81,7 @@ export class GetClickupMonthlyWorkStatsCommand {
 		const { timeWorked, salary } =
 			await this.getClickupMonthlyStatsUseCase.execute({
 				clickUpUserId,
+				discordUserId: interaction.user.id,
 				month,
 				year,
 			});
