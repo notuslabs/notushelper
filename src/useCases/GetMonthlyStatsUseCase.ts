@@ -1,4 +1,3 @@
-import { client } from "../clients/clickup.js";
 import { Exception } from "../helpers/Exception.js";
 import { prisma } from "../main.js";
 import dayjs from "dayjs";
@@ -37,26 +36,21 @@ export class GetMonthlyStatsUseCase {
 			.endOf("month")
 			.toDate();
 
-		const [timeTrackingEntries, currentTimeTracking] = await Promise.all([
-			await client.timeTracking.getTimeTrackingEntries({
-				teamId: process.env.CLICKUP_TEAM_ID || "",
-				startDate: firstDayOfTheMonth.getTime(),
-				endDate: lastDayOfTheMonth.getTime(),
-				assignee: employee.clickUpUserId.toString(),
-			}),
-			month === dayjs().month()
-				? await client.timeTracking.getTimeTrackingRunning({
-						teamId: process.env.CLICKUP_TEAM_ID || "",
-						assignee: employee.clickUpUserId.toString(),
-					})
-				: null,
-		]);
+		const timeTrackingEntries = await prisma.timeEntry.findMany({
+			where: {
+				employeeId: employee.id,
+				createdAt: {
+					gte: firstDayOfTheMonth,
+					lt: lastDayOfTheMonth,
+				},
+			},
+		});
 
 		const { duration: timeWorkedInMS } = timeTrackingEntries.reduce(
 			(pTime, cTime) => ({
-				duration: Number(pTime.duration) + Number(cTime.duration),
+				duration: Number(pTime.duration) + Number(cTime.durationInMS),
 			}),
-			{ duration: Math.abs(Number(currentTimeTracking?.duration ?? 0)) },
+			{ duration: 0 },
 		);
 
 		const timeWorkedInHours = timeWorkedInMS / 3.6e6;

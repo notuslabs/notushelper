@@ -5,21 +5,47 @@ import {
 } from "discord.js";
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { GetMonthlyStatsUseCase } from "../useCases/GetMonthlyStatsUseCase.js";
+import { GetClickupMonthlyStatsUseCase } from "../useCases/GetClickupMonthlyStatsUseCase.js";
 import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
 import dayjs from "dayjs";
+import { SearchMembersByTeamUseCase } from "../useCases/SearchMembersByTeamUseCase.js";
 
 @Discord()
 @Guard(InteractionExceptionHandler(true))
 @injectable()
-export class GetWorkStatsCommand {
-	constructor(private getWorkStatsUseCase: GetMonthlyStatsUseCase) {}
+export class GetClickupMonthlyWorkStatsCommand {
+	constructor(
+		private getClickupMonthlyStatsUseCase: GetClickupMonthlyStatsUseCase,
+	) {}
 
 	@Slash({
-		name: "monthlystats-work",
-		description: "Get your monthly work statistics",
+		name: "clickup-monthlystats",
+		description: "Get your monthly ClickUp work statistics",
 	})
 	async handle(
+		@SlashOption({
+			name: "usuario",
+			autocomplete: async (interaction) => {
+				const searchMembersByTeamUseCase = new SearchMembersByTeamUseCase();
+
+				const results = await searchMembersByTeamUseCase.execute({
+					query: interaction.options.getFocused(),
+					teamId: process.env.CLICKUP_TEAM_ID || "",
+				});
+
+				await interaction.respond(
+					results.map((member) => ({
+						name: member.item.username,
+						value: member.item.id,
+					})),
+				);
+			},
+			description: "Seu usuário no Clickup",
+			required: true,
+			type: ApplicationCommandOptionType.Number,
+		})
+		clickUpUserId: string,
+
 		@SlashChoice(
 			{ name: "January", value: 0 },
 			{ name: "February", value: 1 },
@@ -40,7 +66,7 @@ export class GetWorkStatsCommand {
 			required: false,
 			type: ApplicationCommandOptionType.Integer,
 		})
-		month: number = dayjs().month(),
+		month = 7, // september is the last month where we used clickup until now
 
 		@SlashOption({
 			name: "year",
@@ -52,26 +78,32 @@ export class GetWorkStatsCommand {
 
 		interaction: CommandInteraction,
 	) {
-		const { timeWorked, salary } = await this.getWorkStatsUseCase.execute({
-			discordUserId: interaction.user.id,
-			month,
-			year,
-		});
+		const { timeWorked, salary } =
+			await this.getClickupMonthlyStatsUseCase.execute({
+				clickUpUserId,
+				month,
+				year,
+			});
 
 		const hoursWorkedEmbed = new EmbedBuilder()
-			.setTitle(`Work statistics - ${dayjs().month(month).format("MMMM")}`)
-			.setDescription("Hey! Looking for some monthly work statistics?")
+			.setTitle(
+				`ClickUp Work statistics - ${dayjs().month(month).format("MMMM")}`,
+			)
+			.setDescription("Hey! Looking for some monthly ClickUp work statistics?")
 			.setColor("#fe9b69")
 			.addFields({
 				name: "Hours worked:",
 				value: timeWorked,
 				inline: true,
-			})
-			.addFields({
-				name: "Your salary:",
-				value: `R$ ${salary}`,
+			});
+
+		if (salary) {
+			hoursWorkedEmbed.addFields({
+				name: "Salary:",
+				value: salary,
 				inline: true,
 			});
+		}
 
 		await interaction.followUp({
 			embeds: [hoursWorkedEmbed],
