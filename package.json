@@ -12,7 +12,7 @@
     "build": "tsc",
     "build:changelog": "npx @discordx/changelog --src src",
     "dev": "nodemon --exec ts-node-esm src/main.ts",
-    "start": "sleep 5 && npx prisma migrate deploy && node build/main.js",
+    "start": "npx prisma migrate deploy && node build/main.js",
     "format": "biome format src/ --write"
   },
   "dependencies": {
@@ -20,13 +20,14 @@
     "@discordx/pagination": "^3.4.0",
     "@prisma/client": "5.13.0",
     "@t3-oss/env-core": "^0.10.1",
-    "cache-manager": "^5.2.3",
+    "cache-manager": "^6.2.0",
     "clickup.ts": "^1.0.6",
     "dayjs": "^1.11.10",
     "discord.js": "^14.7.1",
     "discordx": "^11.7.0",
     "dotenv": "^16.0.3",
     "fuse.js": "^6.6.2",
+    "node-cron": "^3.0.3",
     "parse-ms": "^3.0.0",
     "pretty-ms": "^8.0.0",
     "reflect-metadata": "^0.1.13",
@@ -35,7 +36,7 @@
     "zod": "^3.23.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.1",
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "^18.13.0",
     "@types/uuid": "^9.0.0",
     "nodemon": "^3.1.0",

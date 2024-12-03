@@ -6,6 +6,9 @@ const envVariables = z.object({
 	BOT_TOKEN: z.string(),
 	ALLOWED_SALARY_REQUESTERS_IDS: z.string(),
 	CODE_REVIEW_CHANNEL_ID: z.string(),
+	TRANSFERO_CLIENT_ID: z.string(),
+	TRANSFERO_CLIENT_SECRET: z.string(),
+	TRANSFERO_SCOPE: z.string(),
 });
 
 envVariables.parse(process.env);

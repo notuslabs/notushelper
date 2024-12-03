@@ -64,3 +64,20 @@ model TimeEntry {
 
   @@map("time_entries")
 }
+
+enum DisplayChannelType {
+  TRANFERO_BRL_BALANCE
+}
+
+model DisplayChannel {
+  id         String @id @default(uuid())
+  channelId  String @unique
+  categoryId String
+
+  type DisplayChannelType @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("display_channels")
+}
