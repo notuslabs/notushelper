@@ -5,17 +5,6 @@ const prisma = new PrismaClient();
 const maintainers: Prisma.MaintainerUpsertArgs[] = [
 	{
 		where: {
-			discordUserId: "522095646061363212",
-		},
-		create: {
-			name: "Nicholas Costa",
-			discordUserId: "522095646061363212",
-			role: ["FRONTEND"],
-		},
-		update: {},
-	},
-	{
-		where: {
 			discordUserId: "692404092756164668",
 		},
 		create: {
@@ -109,6 +98,16 @@ const projects: Prisma.ProjectUpsertArgs[] = [
 		},
 		create: {
 			name: "nas-sdk",
+			roleFocus: "BACKEND",
+		},
+		update: {},
+	},
+	{
+		where: {
+			name: "react-native-chainless-signer",
+		},
+		create: {
+			name: "react-native-chainless-signer",
 			roleFocus: "BACKEND",
 		},
 		update: {},
