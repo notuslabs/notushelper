@@ -5,7 +5,7 @@ import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHand
 import { CreateSummaryUseCase } from "../useCases/CreateSummaryUseCase.js";
 
 @Discord()
-@Guard(InteractionExceptionHandler(true))
+@Guard(InteractionExceptionHandler(false))
 @injectable()
 export class CreateSummaryCommand {
 	constructor(private createSummaryUseCase: CreateSummaryUseCase) {}
