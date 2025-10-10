@@ -18,8 +18,10 @@
   "dependencies": {
     "@discordx/importer": "^1.1.10",
     "@discordx/pagination": "^3.4.0",
+    "@openrouter/ai-sdk-provider": "^1.2.0",
     "@prisma/client": "5.13.0",
     "@t3-oss/env-core": "^0.10.1",
+    "ai": "^5.0.68",
     "cache-manager": "^6.2.0",
     "dayjs": "^1.11.10",
     "discord.js": "^14.7.1",

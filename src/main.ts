@@ -6,9 +6,10 @@ import { IntentsBitField } from "discord.js";
 import { Client } from "discordx";
 import prettyMS from "pretty-ms";
 
-import { container } from "tsyringe";
-import { DIService, tsyringeDependencyRegistryEngine } from "discordx";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { PrismaClient } from "@prisma/client";
+import { DIService, tsyringeDependencyRegistryEngine } from "discordx";
+import { container } from "tsyringe";
 
 DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
@@ -33,6 +34,10 @@ export const prisma = new PrismaClient().$extends({
 			},
 		},
 	},
+});
+
+export const openRouter = createOpenRouter({
+	apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 export const bot = new Client({
