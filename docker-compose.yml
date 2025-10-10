@@ -1,0 +1,14 @@
+version: "3"
+services:
+  notushelperPostgres:
+    image: postgres
+    container_name: notushelperpostgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - notushelperPostgresData:/data/postgres
+volumes:
+  notushelperPostgresData:

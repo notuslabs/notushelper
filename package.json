@@ -1,0 +1,51 @@
+{
+  "name": "notushelper",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "build/main.js",
+  "prisma": {
+    "seed": "ts-node-esm src/seed.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:changelog": "npx @discordx/changelog --src src",
+    "dev": "nodemon --exec ts-node-esm src/main.ts",
+    "start": "npx prisma migrate deploy && node build/main.js",
+    "format": "biome format src/ --write"
+  },
+  "dependencies": {
+    "@discordx/importer": "^1.1.10",
+    "@discordx/pagination": "^3.4.0",
+    "@prisma/client": "5.13.0",
+    "@t3-oss/env-core": "^0.10.1",
+    "cache-manager": "^6.2.0",
+    "dayjs": "^1.11.10",
+    "discord.js": "^14.7.1",
+    "discordx": "^11.7.0",
+    "dotenv": "^16.0.3",
+    "fuse.js": "^6.6.2",
+    "node-cron": "^3.0.3",
+    "parse-ms": "^3.0.0",
+    "pretty-ms": "^8.0.0",
+    "reflect-metadata": "^0.1.13",
+    "stale-while-revalidate-cache": "^3.2.1",
+    "tsyringe": "^4.7.0",
+    "zod": "^3.23.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^18.13.0",
+    "@types/uuid": "^9.0.0",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": "18.16.0",
+    "npm": "9.5.1"
+  },
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+}

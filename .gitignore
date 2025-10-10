@@ -1,0 +1,10 @@
+# files
+.vscode
+.env
+.env.local
+yarn.lock
+src/seed.ts
+
+# folders
+build
+node_modules

@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id             String @id @default(uuid())
+  name           String
+  salaryPerHour  Float
+  discordUserId  String @unique
+  workloadPerDay Int    @default(8)
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  TimeEntry TimeEntry[]
+}
+
+enum Role {
+  BACKEND
+  FRONTEND
+}
+
+model Developer {
+  id            String @id @default(uuid())
+  name          String
+  discordUserId String @unique
+  reviewCount   Int    @default(0)
+  role          Role[]
+  teams         Team[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("maintainers")
+}
+
+model Team {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  developers Developer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teams")
+}
+
+model TimeEntry {
+  id         String    @id @default(uuid())
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  employeeId String
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
+
+  onCall Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("time_entries")
+}

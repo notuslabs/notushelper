@@ -1,0 +1,40 @@
+import { Exception } from "../helpers/Exception.js";
+import { prisma } from "../main.js";
+
+export type UpdateEmployeeInput = {
+	discordUserId: string;
+	salaryPerHour: number;
+	workloadPerDay: number;
+	username: string;
+};
+
+export class UpdateEmployeeUseCase {
+	async execute({
+		discordUserId,
+		salaryPerHour,
+		workloadPerDay,
+		username,
+	}: UpdateEmployeeInput) {
+		const employeeExists = await prisma.employee.findUnique({
+			where: { discordUserId },
+		});
+
+		if (!employeeExists) {
+			throw new Exception(
+				"You're not in the system. Please use the `/setup init` command.",
+				"user_not_registered",
+			);
+		}
+
+		const employee = await prisma.employee.update({
+			where: { discordUserId },
+			data: {
+				salaryPerHour,
+				workloadPerDay,
+				name: username,
+			},
+		});
+
+		return employee;
+	}
+}
