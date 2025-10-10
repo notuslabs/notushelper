@@ -6,22 +6,22 @@ A Discord bot built with TypeScript and DiscordX that helps manage code reviews,
 
 ### 📝 Code Review Management
 
-- **Automated Reviewer Assignment**: Automatically assigns code reviewers when PRs are posted in designated channels
-- **Smart Round-Robin Distribution**: Uses a fair round-robin algorithm based on review counts to distribute work evenly
-- **Project-Aware**: Prioritizes reviewers who are developers of the specific project being reviewed
-- **Review Leaderboard**: Track and display code review statistics for team members
+- **Automated Reviewer Assignment**: Posts with GitHub links in the review channel create a thread and assign reviewers
+- **Team-aware selection**: Prioritizes the author's team(s); falls back to outside teams if needed
+- **Fair round-robin**: Chooses reviewers with the lowest reviewCount
+- **Mentions respected**: Mentioned users are used; remaining slots are auto-filled
+- **Review Leaderboard**: Track and display code review statistics
 
 ### ⏱️ Time Tracking
 
-- **Start/Stop Time Tracking**: Simple commands to track work hours
-- **Daily & Monthly Statistics**: View work statistics for individuals or teams
-- **ClickUp Integration**: Syncs with ClickUp for comprehensive time tracking
+- **Start/Stop tracking**: Simple commands to track work hours (optional on-call flag)
+- **Daily & Monthly Statistics**: View your work statistics
 
-### 🎯 Project Features
+### 🎯 Team Features
 
-- Multi-project support with role-based focus (Frontend/Backend)
-- Developer management with project assignments
-- Configurable review assignment logic
+- Team support with developer roles (FRONTEND/BACKEND)
+- Developer management with team assignments
+- Configurable review-assignment logic
 
 ## 🚀 Getting Started
 
@@ -31,7 +31,7 @@ A Discord bot built with TypeScript and DiscordX that helps manage code reviews,
 - npm 9.5.1 or pnpm 9.12.2+
 - PostgreSQL database
 - Discord Bot Token
-- ClickUp API Token (optional, for time tracking features)
+- CODE_REVIEW_CHANNEL_ID (Discord channel ID for review auto-assignment)
 
 ### Installation
 
@@ -53,12 +53,9 @@ pnpm install
 3. Set up your environment variables by creating a `.env` file:
 
 ```env
-DISCORD_TOKEN=your_discord_bot_token
-DISCORD_CLIENT_ID=your_discord_client_id
+BOT_TOKEN=your_discord_bot_token
 DATABASE_URL=postgresql://user:password@localhost:5432/notushelper
 CODE_REVIEW_CHANNEL_ID=your_code_review_channel_id
-CLICKUP_API_KEY=your_clickup_api_key # optional
-CLICKUP_TEAM_ID=your_clickup_team_id # optional
 ```
 
 4. Set up the database:
@@ -74,7 +71,7 @@ npx prisma migrate deploy
 cp src/seed.example.ts src/seed.ts
 
 # Edit src/seed.ts with your team's information
-# Add your developers, projects, and project assignments
+# Add your developers, teams, and team assignments
 ```
 
 6. Seed the database:
@@ -125,15 +122,20 @@ docker-compose down
 
 ### Code Review Commands
 
-- `/setup` - Configure the bot for your server
-- View review leaderboard - See who's been doing the most reviews
+- `/review-leaderboard` - Show review rankings
+- Automatic: post a GitHub link in the review channel to trigger reviewer assignment
 
 ### Time Tracking Commands
 
-- `/start` - Start tracking time
-- `/stop` - Stop tracking time
-- `/daily-stats` - View daily work statistics
-- `/monthly-stats` - View monthly work statistics
+- `/start-time-tracking [on-call]` - Start tracking time
+- `/stop-time-tracking` - Stop tracking time
+- `/dailystats-work` - View daily work statistics
+- `/monthlystats-work [month] [year]` - View monthly work statistics
+
+### Setup Commands
+
+- `/setup init` - Initialize your profile (salario_hora, carga_horaria_dia)
+- `/setup update` - Update your profile (salario_hora, carga_horaria_dia)
 
 ### Help
 
@@ -141,18 +143,20 @@ docker-compose down
 
 ## 🔧 Configuration
 
-### Setting Up Projects
+### Setting Up Teams
 
 1. Edit your `src/seed.ts` file (this file is gitignored for security)
-2. Add your projects to the `projects` array:
+2. Add your teams to the `teams` array and connect developers by `discordUserId`:
 
 ```typescript
-const projects: Prisma.ProjectUpsertArgs[] = [
+const teams: Prisma.TeamUpsertArgs[] = [
   {
-    where: { name: "your-project-name" },
+    where: { name: "Team A" },
     create: {
-      name: "your-project-name",
-      roleFocus: "FRONTEND", // or "BACKEND"
+      name: "Team A",
+      developers: {
+        connect: [{ discordUserId: "123" }, { discordUserId: "456" }],
+      },
     },
     update: {},
   },
@@ -164,58 +168,44 @@ const projects: Prisma.ProjectUpsertArgs[] = [
 Add your developers to the `developers` array:
 
 ```typescript
-const developers: Prisma.MaintainerUpsertArgs[] = [
+const developers: Prisma.DeveloperUpsertArgs[] = [
   {
     where: { discordUserId: "discord_user_id" },
     create: {
       name: "Developer Name",
       discordUserId: "discord_user_id",
-      role: ["FRONTEND"], // can be ["FRONTEND"], ["BACKEND"], or both
+      role: ["FRONTEND"], // ["FRONTEND"], ["BACKEND"], or both
     },
     update: {},
   },
 ];
 ```
 
-### Assigning Developers to Projects
+### Assigning Developers to Teams
 
-Configure the `maintainerProjectConnections` array to specify which developers work on which projects:
+Use the `developers.connect` relation on a team to link developers by `discordUserId` (as shown above). You can also connect on updates:
 
 ```typescript
-const maintainerProjectConnections: Array<{
-  maintainerDiscordId: string;
-  projectNames: string[];
-}> = [
-  {
-    maintainerDiscordId: "discord_user_id",
-    projectNames: ["project-1", "project-2"],
-  },
-];
+await prisma.team.update({
+  where: { name: "Team A" },
+  data: { developers: { connect: [{ discordUserId: "discord_user_id" }] } },
+});
 ```
 
 ## 🎯 How Code Review Assignment Works
 
-1. When a GitHub PR link is posted in the code review channel, the bot:
-
-   - Identifies the project from the repository name
-   - Looks for developers assigned to that project
-   - Selects reviewers with the lowest review count (round-robin)
-   - If not enough project developers are available, fills remaining slots with other developers
-   - Creates a thread and mentions the selected reviewers
-
-2. The review count automatically increments for assigned reviewers, ensuring fair distribution over time
-
-3. If reviewers are manually mentioned in the message, the bot respects those mentions
+1. Post a GitHub link in the configured review channel (`CODE_REVIEW_CHANNEL_ID`): a thread is created and reviewers are selected.
+2. Mentions are respected: if none are mentioned, 2 reviewers are auto-picked; if one is mentioned, 1 more is auto-picked.
+3. Selection prioritizes the author's team(s) by lowest `reviewCount`, then fills from outside teams, then anyone if needed. Assigned reviewers have their `reviewCount` incremented.
 
 ## 🗂️ Database Schema
 
 The bot uses PostgreSQL with Prisma ORM. Main entities:
 
-- **Employee**: Tracks employees with salary and time tracking information
-- **Developer**: Code reviewers with project assignments
-- **Project**: Software projects with role focus
-- **TimeEntry**: Time tracking records
-- **DisplayChannel**: Configuration for special display channels
+- **Employee**: id, name, salaryPerHour, discordUserId (unique), workloadPerDay
+- **Developer**: id, name, discordUserId (unique), reviewCount, role (FRONTEND/BACKEND), teams (many-to-many) — mapped to table `maintainers`
+- **Team**: id, name (unique), developers — mapped to table `teams`
+- **TimeEntry**: id, employee relation, startedAt, endedAt, onCall, createdAt/updatedAt — mapped to table `time_entries`
 
 ## 🛠️ Tech Stack
 
@@ -223,7 +213,6 @@ The bot uses PostgreSQL with Prisma ORM. Main entities:
 - **Language**: TypeScript
 - **Database**: PostgreSQL with Prisma ORM
 - **Dependency Injection**: TSyringe
-- **API Integrations**: ClickUp
 
 ## 📝 Development Guidelines
 
