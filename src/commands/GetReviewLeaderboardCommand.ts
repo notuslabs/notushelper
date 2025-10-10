@@ -5,7 +5,7 @@ import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHand
 import { GetReviewLeaderboardUseCase } from "../useCases/GetReviewLeaderboardUseCase.js";
 
 @Discord()
-@Guard(InteractionExceptionHandler(true))
+@Guard(InteractionExceptionHandler(false))
 @injectable()
 export class GetReviewLeaderboardCommand {
 	constructor(
