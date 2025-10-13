@@ -1,11 +1,10 @@
-import { CommandInteraction } from "discord.js";
-import { Discord, Guard, Slash } from "discordx";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import { Exception } from "../helpers/Exception.js";
 import { CreateSummaryUseCase } from "../useCases/CreateSummaryUseCase.js";
 
 @Discord()
-@Guard(InteractionExceptionHandler(false))
 @injectable()
 export class CreateSummaryCommand {
 	constructor(private createSummaryUseCase: CreateSummaryUseCase) {}
@@ -14,7 +13,26 @@ export class CreateSummaryCommand {
 		name: "create-summary",
 		description: "Create a summary",
 	})
-	async execute(interaction: CommandInteraction) {
-		await this.createSummaryUseCase.execute(interaction);
+	async execute(
+		@SlashOption({
+			name: "ephemeral",
+			description: "If the summary should be ephemeral",
+			required: false,
+			type: ApplicationCommandOptionType.Boolean,
+		})
+		ephemeral = true,
+		interaction: CommandInteraction,
+	) {
+		try {
+			await interaction.deferReply({ ephemeral });
+			await this.createSummaryUseCase.execute(interaction);
+		} catch (error) {
+			if (error instanceof Exception) {
+				await interaction.followUp(error.message);
+				return;
+			}
+
+			await interaction.followUp(`Unexpected error occurred. ${error}`);
+		}
 	}
 }
