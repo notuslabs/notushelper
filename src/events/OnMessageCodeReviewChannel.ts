@@ -1,7 +1,7 @@
 import { type ArgsOf, Discord, On } from "discordx";
-import { CreateCodeReviewThreadUseCase } from "../useCases/CreateCodeReviewThreadUseCase";
 import { injectable } from "tsyringe";
 import { Exception } from "../helpers/Exception";
+import { CreateCodeReviewThreadUseCase } from "../useCases/CreateCodeReviewThreadUseCase";
 
 @Discord()
 @injectable()

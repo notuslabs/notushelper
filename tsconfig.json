@@ -1,24 +1,29 @@
 {
-	"compilerOptions": {
-		"target": "ES2023",
-		"module": "ESNext",
-		"strict": true,
-		"esModuleInterop": true,
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"strictPropertyInitialization": false,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true
-	},
-	"include": [
-		"src/**/*",
-		"prisma/**/*",
-		"prisma.config.ts"
-	],
-	"exclude": [
-		"node_modules"
-	]
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "target": "es2022",
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "moduleDetection": "force",
+        "isolatedModules": true,
+        "verbatimModuleSyntax": true,
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitOverride": true,
+        "module": "preserve",
+        "noEmit": true,
+        "lib": [
+            "es2022"
+        ]
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
