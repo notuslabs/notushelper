@@ -1,4 +1,4 @@
-import { ModelMessage, generateText } from "ai";
+import { type ModelMessage, generateText } from "ai";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { Exception } from "../helpers/Exception";
 import { openRouter } from "../main";
