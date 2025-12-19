@@ -7,7 +7,7 @@
 	"main": "src/main.ts",
 	"scripts": {
 		"dev": "bun --watch src/main.ts",
-		"start": "bunx prisma migrate deploy && bun src/main.ts",
+		"start": "bunx prisma generate && bun src/main.ts",
 		"format": "biome format src/ --write"
 	},
 	"dependencies": {

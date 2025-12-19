@@ -6,10 +6,10 @@ import { IntentsBitField } from "discord.js";
 import { Client } from "discordx";
 
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { PrismaClient } from "../prisma/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { container } from "tsyringe";
+import { PrismaClient } from "./generated/prisma/client";
 
 DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
