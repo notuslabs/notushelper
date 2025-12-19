@@ -20,7 +20,7 @@ export class CreateSummaryCommand {
 			required: false,
 			type: ApplicationCommandOptionType.Boolean,
 		})
-		ephemeral = true,
+		ephemeral = false,
 		interaction: CommandInteraction,
 	) {
 		try {
