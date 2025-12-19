@@ -1,5 +1,5 @@
-import { Exception } from "../helpers/Exception.js";
-import { prisma } from "../main.js";
+import { Exception } from "../helpers/Exception";
+import { prisma } from "../main";
 import dayjs from "dayjs";
 
 export type GetWorkStatsUseCaseInput = {

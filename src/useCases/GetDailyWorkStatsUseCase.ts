@@ -1,8 +1,8 @@
 import { Discord } from "discordx";
 import { injectable } from "tsyringe";
 import dayjs from "dayjs";
-import { prisma } from "../main.js";
-import { Exception } from "../helpers/Exception.js";
+import { prisma } from "../main";
+import { Exception } from "../helpers/Exception";
 import prettyMilliseconds from "pretty-ms";
 
 export type GetDailyWorkStatsUseCaseInput = {

@@ -1,0 +1,3 @@
+[install]
+# Install with production dependencies only when NODE_ENV=production
+auto = "fallback"

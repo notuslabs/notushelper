@@ -1,7 +1,7 @@
 import { Discord, Guard, Slash } from "discordx";
 import { injectable } from "tsyringe";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
-import { StopTimeTrackingUseCase } from "../useCases/StopTimeTrackingUseCase.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
+import { StopTimeTrackingUseCase } from "../useCases/StopTimeTrackingUseCase";
 import { CommandInteraction } from "discord.js";
 
 @Discord()

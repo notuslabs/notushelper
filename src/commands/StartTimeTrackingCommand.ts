@@ -1,8 +1,8 @@
 import { Discord, Guard, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
 import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
-import { StartTimeTrackingUseCase } from "../useCases/StartTimeTrackingUseCase.js";
+import { StartTimeTrackingUseCase } from "../useCases/StartTimeTrackingUseCase";
 
 @Discord()
 @Guard(InteractionExceptionHandler(true))

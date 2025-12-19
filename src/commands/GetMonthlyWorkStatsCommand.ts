@@ -5,8 +5,8 @@ import {
 } from "discord.js";
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { GetMonthlyStatsUseCase } from "../useCases/GetMonthlyStatsUseCase.js";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import { GetMonthlyStatsUseCase } from "../useCases/GetMonthlyStatsUseCase";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
 import dayjs from "dayjs";
 
 @Discord()

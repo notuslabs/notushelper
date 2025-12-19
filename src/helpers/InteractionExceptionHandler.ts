@@ -1,7 +1,7 @@
 import { ButtonInteraction, CommandInteraction } from "discord.js";
 import { GuardFunction } from "discordx";
 
-import { Exception } from "./Exception.js";
+import { Exception } from "./Exception";
 
 export const InteractionExceptionHandler: (
 	ephemeral: boolean,

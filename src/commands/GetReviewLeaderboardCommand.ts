@@ -1,8 +1,8 @@
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { Discord, Guard, Slash } from "discordx";
 import { injectable } from "tsyringe";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
-import { GetReviewLeaderboardUseCase } from "../useCases/GetReviewLeaderboardUseCase.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
+import { GetReviewLeaderboardUseCase } from "../useCases/GetReviewLeaderboardUseCase";
 
 @Discord()
 @Guard(InteractionExceptionHandler(false))

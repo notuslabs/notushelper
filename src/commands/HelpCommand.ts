@@ -1,8 +1,8 @@
 import { Discord, Guard, Slash } from "discordx";
 import { injectable } from "tsyringe";
-import { bot } from "../main.js";
+import { bot } from "../main";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
 
 @Discord()
 @Guard(InteractionExceptionHandler(false))

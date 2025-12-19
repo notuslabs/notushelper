@@ -53,7 +53,7 @@ export const bot = new Client({
 	silent: false,
 });
 
-bot.once("ready", async () => {
+bot.once("clientReady", async () => {
 	await bot.initApplicationCommands();
 
 	console.log("Bot started");

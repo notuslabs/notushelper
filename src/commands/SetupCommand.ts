@@ -1,9 +1,9 @@
 import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { Discord, Guard, Slash, SlashGroup, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
-import { CreateEmployeeUseCase } from "../useCases/CreateEmployeeUseCase.js";
-import { UpdateEmployeeUseCase } from "../useCases/UpdateEmployeeUseCase.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
+import { CreateEmployeeUseCase } from "../useCases/CreateEmployeeUseCase";
+import { UpdateEmployeeUseCase } from "../useCases/UpdateEmployeeUseCase";
 
 @Discord()
 @SlashGroup({ name: "setup", description: "Setup employee" })

@@ -1,7 +1,7 @@
 import { ModelMessage, generateText } from "ai";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
-import { Exception } from "../helpers/Exception.js";
-import { openRouter } from "../main.js";
+import { Exception } from "../helpers/Exception";
+import { openRouter } from "../main";
 
 export class CreateSummaryUseCase {
 	async execute(interaction: CommandInteraction) {

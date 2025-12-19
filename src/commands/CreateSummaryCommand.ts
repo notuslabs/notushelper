@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 import { injectable } from "tsyringe";
-import { Exception } from "../helpers/Exception.js";
-import { CreateSummaryUseCase } from "../useCases/CreateSummaryUseCase.js";
+import { Exception } from "../helpers/Exception";
+import { CreateSummaryUseCase } from "../useCases/CreateSummaryUseCase";
 
 @Discord()
 @injectable()

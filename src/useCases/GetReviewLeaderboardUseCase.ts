@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { DevelopersRepository } from "../repositories/DevelopersRepository.js";
+import { DevelopersRepository } from "../repositories/DevelopersRepository";
 
 export type GetReviewLeaderboardOutput = {
 	name: string;

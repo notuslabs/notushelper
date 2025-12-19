@@ -2,7 +2,7 @@ import { Discord, Once } from "discordx";
 
 @Discord()
 export class BotReady {
-	@Once({ event: "ready" })
+	@Once({ event: "clientReady" })
 	async handle() {
 		console.log("Bot Ready.");
 	}

@@ -1,7 +1,7 @@
 import { Discord, Guard, Slash } from "discordx";
-import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler.js";
+import { InteractionExceptionHandler } from "../helpers/InteractionExceptionHandler";
 import { injectable } from "tsyringe";
-import { GetDailyWorkStatsUseCase } from "../useCases/GetDailyWorkStatsUseCase.js";
+import { GetDailyWorkStatsUseCase } from "../useCases/GetDailyWorkStatsUseCase";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 
 @Discord()

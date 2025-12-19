@@ -1,8 +1,8 @@
 import { type Channel, type Message, TextChannel } from "discord.js";
 import { Discord } from "discordx";
 import { injectable } from "tsyringe";
-import { DevelopersRepository } from "../repositories/DevelopersRepository.js";
-import { TeamsRepository } from "../repositories/TeamsRepository.js";
+import { DevelopersRepository } from "../repositories/DevelopersRepository";
+import { TeamsRepository } from "../repositories/TeamsRepository";
 
 export type CreateCodeReviewThreadInput = {
 	message: Message;

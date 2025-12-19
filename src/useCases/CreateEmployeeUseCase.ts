@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
-import { Exception } from "../helpers/Exception.js";
-import { prisma } from "../main.js";
+import { Exception } from "../helpers/Exception";
+import { prisma } from "../main";
 
 export type SetupUseCaseInput = {
 	username: string;
