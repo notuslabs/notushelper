@@ -8,3 +8,4 @@ src/seed.ts
 # folders
 build
 node_modules
+prisma/generated

@@ -4,37 +4,20 @@ import { dirname, importx } from "@discordx/importer";
 import type { Interaction, Message } from "discord.js";
 import { IntentsBitField } from "discord.js";
 import { Client } from "discordx";
-import prettyMS from "pretty-ms";
 
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { DIService, tsyringeDependencyRegistryEngine } from "discordx";
 import { container } from "tsyringe";
 
 DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
-function computeDuration(startedAt: Date, endedAt: Date | null) {
-	return endedAt
-		? endedAt.getTime() - startedAt.getTime()
-		: new Date().getTime() - startedAt.getTime();
-}
-
-export const prisma = new PrismaClient().$extends({
-	result: {
-		timeEntry: {
-			durationInMS: {
-				needs: { startedAt: true, endedAt: true },
-				compute: (data) => computeDuration(data.startedAt, data.endedAt),
-			},
-			formattedDuration: {
-				needs: { startedAt: true, endedAt: true },
-				compute(data) {
-					return prettyMS(computeDuration(data.startedAt, data.endedAt));
-				},
-			},
-		},
-	},
+const adapter = new PrismaPg({
+	connectionString: process.env.DATABASE_URL,
 });
+
+export const prisma = new PrismaClient({ adapter });
 
 export const openRouter = createOpenRouter({
 	apiKey: process.env.OPENROUTER_API_KEY,
