@@ -93,8 +93,8 @@ export class CreateQAModal {
 		}
 
 		const reviewerMentions = [
-			...selectedReviewers.android.map((m) => `</${m.id}> (Android)`),
-			...selectedReviewers.apple.map((m) => `</${m.id}> (Apple)`),
+			...selectedReviewers.android.map((m) => `<@${m.id}> (Android)`),
+			...selectedReviewers.apple.map((m) => `<@${m.id}> (Apple)`),
 		].join("\n");
 
 		embed.addFields({
@@ -105,6 +105,7 @@ export class CreateQAModal {
 		const thread = await qaForumChannel.threads.create({
 			name: title,
 			message: {
+				content: `Eu escolho vocês! ${reviewerMentions}!`,
 				embeds: [embed],
 			},
 		});
