@@ -32,8 +32,8 @@ model Developer {
   name          String
   discordUserId String @unique
   reviewCount   Int    @default(0)
+  sequenceIndex Int    @default(0)
   role          Role[]
-  teams         Team[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,16 +41,7 @@ model Developer {
   @@map("maintainers")
 }
 
-model Team {
-  id         String      @id @default(uuid())
-  name       String      @unique
-  developers Developer[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("teams")
-}
 
 model TimeEntry {
   id         String    @id @default(uuid())

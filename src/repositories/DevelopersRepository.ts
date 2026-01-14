@@ -21,22 +21,8 @@ export type FindDevelopersByProjectInput = {
 	limit?: number;
 };
 
-export type FindDevelopersByTeamInput = {
-	teamId: string;
-	excludeDevelopers: string[];
-	limit?: number;
-};
-
-export type FindDevelopersByTeamsInput = {
-	teamIds: string[];
-	excludeDevelopers: string[];
-	limit?: number;
-};
-
-export type FindDevelopersOutsideTeamsInput = {
-	teamIds: string[];
-	excludeDevelopers: string[];
-	limit?: number;
+export type MoveToEndOfQueueInput = {
+	developersIds: string[];
 };
 
 export class DevelopersRepository {
@@ -54,7 +40,7 @@ export class DevelopersRepository {
 				},
 			},
 			orderBy: {
-				reviewCount: "asc",
+				sequenceIndex: "asc",
 			},
 		});
 
@@ -78,7 +64,7 @@ export class DevelopersRepository {
 				},
 			},
 			orderBy: {
-				reviewCount: "asc",
+				sequenceIndex: "asc",
 			},
 		});
 
@@ -117,92 +103,9 @@ export class DevelopersRepository {
 
 	async findDevelopersByProject({ projectId }: FindDevelopersByProjectInput) {
 		throw new Exception(
-			"Project-based selection was removed; use team-based methods.",
+			"Project-based selection was removed; use findAllDevelopers.",
 			"PROJECTS_REMOVED",
 		);
-	}
-
-	async findDevelopersByTeam({
-		teamId,
-		excludeDevelopers,
-		limit = 2,
-	}: FindDevelopersByTeamInput) {
-		const developers = await prisma.developer.findMany({
-			where: {
-				discordUserId: {
-					notIn: excludeDevelopers,
-				},
-				teams: {
-					some: {
-						id: teamId,
-					},
-				},
-			},
-			orderBy: {
-				reviewCount: "asc",
-			},
-			take: limit,
-		});
-
-		return developers;
-	}
-
-	async findDevelopersByTeams({
-		teamIds,
-		excludeDevelopers,
-		limit = 2,
-	}: FindDevelopersByTeamsInput) {
-		if (teamIds.length === 0) return [];
-
-		const developers = await prisma.developer.findMany({
-			where: {
-				discordUserId: {
-					notIn: excludeDevelopers,
-				},
-				teams: {
-					some: {
-						id: {
-							in: teamIds,
-						},
-					},
-				},
-			},
-			orderBy: {
-				reviewCount: "asc",
-			},
-			take: limit,
-		});
-
-		return developers;
-	}
-
-	async findDevelopersOutsideTeams({
-		teamIds,
-		excludeDevelopers,
-		limit = 2,
-	}: FindDevelopersOutsideTeamsInput) {
-		const developers = await prisma.developer.findMany({
-			where: {
-				discordUserId: {
-					notIn: excludeDevelopers,
-				},
-				...(teamIds.length > 0
-					? {
-							teams: {
-								none: {
-									id: { in: teamIds },
-								},
-							},
-						}
-					: {}),
-			},
-			orderBy: {
-				reviewCount: "asc",
-			},
-			take: limit,
-		});
-
-		return developers;
 	}
 
 	async findAllDevelopers({
@@ -219,11 +122,25 @@ export class DevelopersRepository {
 				},
 			},
 			orderBy: {
-				reviewCount: "asc",
+				sequenceIndex: "asc",
 			},
 			take: limit,
 		});
 
 		return developers;
+	}
+
+	async moveToEndOfQueue({ developersIds }: MoveToEndOfQueueInput) {
+		const maxSequence = await prisma.developer.aggregate({
+			_max: { sequenceIndex: true },
+		});
+		let nextIndex = (maxSequence._max.sequenceIndex ?? 0) + 1;
+
+		for (const discordUserId of developersIds) {
+			await prisma.developer.update({
+				where: { discordUserId },
+				data: { sequenceIndex: nextIndex++ },
+			});
+		}
 	}
 }

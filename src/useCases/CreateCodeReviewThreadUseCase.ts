@@ -2,7 +2,6 @@ import { type Channel, type Message, TextChannel } from "discord.js";
 import { Discord } from "discordx";
 import { injectable } from "tsyringe";
 import { DevelopersRepository } from "../repositories/DevelopersRepository";
-import { TeamsRepository } from "../repositories/TeamsRepository";
 
 export type CreateCodeReviewThreadInput = {
 	message: Message;
@@ -12,10 +11,7 @@ export type CreateCodeReviewThreadInput = {
 @Discord()
 @injectable()
 export class CreateCodeReviewThreadUseCase {
-	constructor(
-		private developersRepository: DevelopersRepository,
-		private teamsRepository: TeamsRepository,
-	) {}
+	constructor(private developersRepository: DevelopersRepository) {}
 
 	async execute({ channel, message }: CreateCodeReviewThreadInput) {
 		if (!(channel instanceof TextChannel)) return;
@@ -47,57 +43,13 @@ export class CreateCodeReviewThreadUseCase {
 		let reviewers: string[] = [];
 
 		if (reviewersNeeded > 0) {
-			// Determine author's teams first
-			const authorTeams = await this.teamsRepository.findTeamsByMemberDiscordId(
-				{
-					discordUserId: message.author.id,
-				},
-			);
-
-			const teamIds = authorTeams.map((t) => t.id);
 			const excludeDevelopers = [message.author.id, ...mentionedReviewers];
 
-			let selectedDevelopers: { discordUserId: string }[] = [];
-
-			// 1) Try from author's own teams
-			if (teamIds.length > 0) {
-				selectedDevelopers =
-					await this.developersRepository.findDevelopersByTeams({
-						teamIds,
-						excludeDevelopers,
-						limit: reviewersNeeded,
-					});
-			}
-
-			// 2) If insufficient, fill from outside those teams
-			if (selectedDevelopers.length < reviewersNeeded) {
-				const remaining = reviewersNeeded - selectedDevelopers.length;
-				const outsideDevelopers =
-					await this.developersRepository.findDevelopersOutsideTeams({
-						teamIds,
-						excludeDevelopers: [
-							...excludeDevelopers,
-							...selectedDevelopers.map((m) => m.discordUserId),
-						],
-						limit: remaining,
-					});
-				selectedDevelopers = [...selectedDevelopers, ...outsideDevelopers];
-			}
-
-			// 3) Last resort: any remaining from all maintainers (defensive)
-			if (selectedDevelopers.length < reviewersNeeded) {
-				const remaining = reviewersNeeded - selectedDevelopers.length;
-				const anyDevelopers = await this.developersRepository.findAllDevelopers(
-					{
-						excludeDevelopers: [
-							...excludeDevelopers,
-							...selectedDevelopers.map((m) => m.discordUserId),
-						],
-						limit: remaining,
-					},
-				);
-				selectedDevelopers = [...selectedDevelopers, ...anyDevelopers];
-			}
+			const selectedDevelopers =
+				await this.developersRepository.findAllDevelopers({
+					excludeDevelopers,
+					limit: reviewersNeeded,
+				});
 
 			reviewers = [
 				...mentionedReviewers,
@@ -109,6 +61,10 @@ export class CreateCodeReviewThreadUseCase {
 		}
 
 		await this.developersRepository.increaseReviewCount({
+			developersIds: reviewers,
+		});
+
+		await this.developersRepository.moveToEndOfQueue({
 			developersIds: reviewers,
 		});
 
