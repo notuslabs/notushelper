@@ -58,7 +58,7 @@ export class CreateQAModal {
 
 		const [title, selectedReviewers] = await Promise.all([
 			this.generateTitle(whatToTest),
-			this.selectReviewers(interaction.guild, { android: 2, apple: 1 }),
+			this.selectReviewers(interaction.guild, { android: 2, apple: 1 }, interaction.user.id),
 		]);
 
 		const embed = new EmbedBuilder()
@@ -144,8 +144,12 @@ export class CreateQAModal {
 	private async selectReviewers(
 		guild: Guild,
 		count: { android: number; apple: number },
+		excludeUserId: string,
 	): Promise<{ android: GuildMember[]; apple: GuildMember[] }> {
 		const { appleMembers, androidMembers } = await this.getQAReviewers(guild);
+
+		const filteredApple = appleMembers.filter((m) => m.id !== excludeUserId);
+		const filteredAndroid = androidMembers.filter((m) => m.id !== excludeUserId);
 
 		const selectFromPool = async (
 			members: GuildMember[],
@@ -223,8 +227,8 @@ export class CreateQAModal {
 		};
 
 		const [android, apple] = await Promise.all([
-			selectFromPool(androidMembers, "android", count.android),
-			selectFromPool(appleMembers, "apple", count.apple),
+			selectFromPool(filteredAndroid, "android", count.android),
+			selectFromPool(filteredApple, "apple", count.apple),
 		]);
 
 		return { android, apple };
